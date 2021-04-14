@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+	table{
+	border:1px solid black;
+	border-collapse: collapse;
+	}
+	td,th{
+	border:1px solid black;
+	}
+</style>
+<script type="text/javascript">
+	function saveUser(){
+		function success(response){
+			return response.json();
+		}
+		function errorHandler(error){
+			console.log(error);
+		}
+		console.log('2');
+		const userform = document.getElementById('userform');
+		
+		if(!userform.checkValidity()){
+			alert('form is invalid');
+			return;
+		}
+		const promise = fetch('/user',{ // Ajax request
+			method:'POST',
+			headers:{
+				'Content-Type':'application/json'
+			},
+			body:JSON.stringify({
+				name:document.getElementById('userName').value,
+				email:document.getElementById('userEmail').value,
+				dob:document.getElementById('dob').value,
+				phoneNumber:document.getElementById('userPhoneNumber').value
+			})
+		});
+		promise.then(success);
+		promise.then(function(data){
+			console.log(data);
+		});
+		promise.catch(function(error){
+			console.log(error);
+		});
+		console.log('1');
+	}
+	
+	function getUsers(){
+		const promise = fetch('/user');
+		promise.then(function(response){
+			return response.json();
+		})
+		.then(function(users){
+			const table = document.getElementById('user');
+			for(let i=0;i<users.length;i++){
+				const currentUser = users[i];
+				const row = document.createElement('tr');
+				const idColumn = document.createElement('td');
+				const nameColumn = document.createElement('td');
+				const emailColumn = document.createElement('td');
+				const phoneNumberColumn = document.createElement('td');
+				idColumn.append(currentUser.id);
+				nameColumn.append(currentUser.name);
+				emailColumn.append(currentUser.email);
+				phoneNumberColumn.append(currentUser.phoneNumber);
+				row.appendChild(idColumn);
+				row.appendChild(nameColumn);
+				row.appendChild(emailColumn);
+				row.appendChild(phoneNumberColumn);
+				table.appendChild(row);
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<h3>User Form</h3>
+	<form id='userform'>
+		<input placeholder="Name" id='userName' value="sanjay" required><br>
+		<input type="email" placeholder="Email" id='userEmail' required><br>
+		<input type="tel" placeholder="Phone Number" id='userPhoneNumber' pattern="[0-9]{10}" value="8345672935" required><br>
+		<input type="date" placeholder="DOB" id='dob' required><br>
+	</form>
+	<br>
+	<button onclick="saveUser()">Save User</button>
+	<button onclick="getUsers()">Get Users</button>
+	<div id='resultTable'></div>
+	<table>
+	<thead>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Phone Number</th>
+	</thead>
+	<tbody id='user'>
+	</tbody>
+	</table>
+</body>
+</html>
