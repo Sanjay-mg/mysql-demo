@@ -10,9 +10,9 @@ public interface IUserService {
 
 	List<User> getUsers();
 
-	Optional<User> getUser(Integer userId);
-
 	void updateUser(User user);
 
 	void deleteUser(Integer userId);
+
+	List<User> getUserByName(String name);
 }

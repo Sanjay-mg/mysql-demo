@@ -15,12 +15,13 @@
 <script type="text/javascript">
 	function saveUser(){
 		function success(response){
+			if(!response.ok){
+				alert('error happned');
+				return;
+			}
 			return response.json();
 		}
-		function errorHandler(error){
-			console.log(error);
-		}
-		console.log('2');
+		
 		const userform = document.getElementById('userform');
 		
 		if(!userform.checkValidity()){
@@ -43,10 +44,6 @@
 		promise.then(function(data){
 			console.log(data);
 		});
-		promise.catch(function(error){
-			console.log(error);
-		});
-		console.log('1');
 	}
 	
 	function getUsers(){
@@ -56,6 +53,7 @@
 		})
 		.then(function(users){
 			const table = document.getElementById('user');
+			table.innerHTML='';
 			for(let i=0;i<users.length;i++){
 				const currentUser = users[i];
 				const row = document.createElement('tr');
@@ -63,14 +61,17 @@
 				const nameColumn = document.createElement('td');
 				const emailColumn = document.createElement('td');
 				const phoneNumberColumn = document.createElement('td');
+				const dobColumn = document.createElement('td');
 				idColumn.append(currentUser.id);
 				nameColumn.append(currentUser.name);
 				emailColumn.append(currentUser.email);
 				phoneNumberColumn.append(currentUser.phoneNumber);
+				dobColumn.append(currentUser.dob);
 				row.appendChild(idColumn);
 				row.appendChild(nameColumn);
 				row.appendChild(emailColumn);
 				row.appendChild(phoneNumberColumn);
+				row.appendChild(dobColumn);
 				table.appendChild(row);
 			}
 		})
@@ -95,6 +96,7 @@
 		<th>Name</th>
 		<th>Email</th>
 		<th>Phone Number</th>
+		<th>DOB</th>
 	</thead>
 	<tbody id='user'>
 	</tbody>

@@ -1,7 +1,6 @@
 package com.example.mysqldemo.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +28,9 @@ public class UserController {
 		return userService.getUsers();
 	}
 	
-	@GetMapping("/user/{id}")
-	Optional<User> getUser(@PathVariable("id") Integer userId) {
-		return userService.getUser(userId);
+	@GetMapping("/user/{name}")
+	List<User> getUser(@PathVariable("name") String name) {
+		return userService.getUserByName(name);
 	}
 	
 	@PutMapping("/user/{id}")
